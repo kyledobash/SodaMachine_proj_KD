@@ -109,27 +109,32 @@ namespace SodaMachine
         private List<Coin> GatherChange(double changeValue)
         {
             List<Coin> ChangeToDispense = new List<Coin>();
+            double changeToDispenseSum = TotalCoinValue(ChangeToDispense);
+            double changeNeeded = changeValue - changeToDispenseSum;
 
-            double changeSum = 0;
-
-            foreach (Coin currentCoin in _register)
+            while (changeToDispenseSum != changeValue)
             {
-                if (changeSum + currentCoin.Value < changeValue)
+                if (changeNeeded >= .25 && RegisterHasCoin("Quarter"))
                 {
-                    changeSum += currentCoin.Value;
-                    ChangeToDispense.Add(currentCoin);
+                    ChangeToDispense.Add(GetCoinFromRegister("Quarter"));
+                    changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
-                else if (changeSum + currentCoin.Value > changeValue)
+                else if (changeNeeded >= .10 && RegisterHasCoin("Dime"))
                 {
-                    continue;
+                    ChangeToDispense.Add(GetCoinFromRegister("Dime"));
+                    changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
-                else if (changeSum + currentCoin.Value == changeValue)
+                else if (changeNeeded >= .05 && RegisterHasCoin("Dime"))
                 {
-                    changeSum += currentCoin.Value;
-                    ChangeToDispense.Add(currentCoin);
-                    break;
+                    ChangeToDispense.Add(GetCoinFromRegister("Dime"));
+                    changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
-            }
+                else if (changeNeeded >= .01 && RegisterHasCoin("Dime"))
+                {
+                    ChangeToDispense.Add(GetCoinFromRegister("Dime"));
+                    changeToDispenseSum = TotalCoinValue(ChangeToDispense);
+                }
+            }           
             return ChangeToDispense;
         }
         //Reusable method to check if the register has a coin of that name.
