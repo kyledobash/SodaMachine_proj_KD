@@ -124,14 +124,14 @@ namespace SodaMachine
                     ChangeToDispense.Add(GetCoinFromRegister("Dime"));
                     changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
-                else if (changeNeeded >= .05 && RegisterHasCoin("Dime"))
+                else if (changeNeeded >= .05 && RegisterHasCoin("Nickel"))
                 {
-                    ChangeToDispense.Add(GetCoinFromRegister("Dime"));
+                    ChangeToDispense.Add(GetCoinFromRegister("Nickel"));
                     changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
-                else if (changeNeeded >= .01 && RegisterHasCoin("Dime"))
+                else if (changeNeeded >= .01 && RegisterHasCoin("Penny"))
                 {
-                    ChangeToDispense.Add(GetCoinFromRegister("Dime"));
+                    ChangeToDispense.Add(GetCoinFromRegister("Penny"));
                     changeToDispenseSum = TotalCoinValue(ChangeToDispense);
                 }
             }           
