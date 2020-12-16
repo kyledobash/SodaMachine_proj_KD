@@ -26,19 +26,19 @@ namespace SodaMachine
         //A method to fill the sodamachines register with coin objects.
         public void FillRegister()
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 20; i++)
             {
                 _register.Add(new Quarter());
             }
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 10; i++)
             {
                 _register.Add(new Dime());
             }
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 20; i++)
             {
                 _register.Add(new Nickel());
             }
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 50; i++)
             {
                 _register.Add(new Penny());
             }
@@ -108,7 +108,29 @@ namespace SodaMachine
         //If the change cannot be made, return null.
         private List<Coin> GatherChange(double changeValue)
         {
-            
+            List<Coin> ChangeToDispense = new List<Coin>();
+
+            double changeSum = 0;
+
+            foreach (Coin currentCoin in _register)
+            {
+                if (changeSum + currentCoin.Value < changeValue)
+                {
+                    changeSum += currentCoin.Value;
+                    ChangeToDispense.Add(currentCoin);
+                }
+                else if (changeSum + currentCoin.Value > changeValue)
+                {
+                    continue;
+                }
+                else if (changeSum + currentCoin.Value == changeValue)
+                {
+                    changeSum += currentCoin.Value;
+                    ChangeToDispense.Add(currentCoin);
+                    break;
+                }
+            }
+            return ChangeToDispense;
         }
         //Reusable method to check if the register has a coin of that name.
         //If it does have one, return true.  Else, false.
@@ -139,7 +161,7 @@ namespace SodaMachine
         //Takes in the total payment amount and the price of can to return the change amount.
         private double DetermineChange(double totalPayment, double canPrice)
         {
-            
+            return (totalPayment - canPrice);
         }
         //Takes in a list of coins to returnt he total value of the coins as a double.
         private double TotalCoinValue(List<Coin> payment)
