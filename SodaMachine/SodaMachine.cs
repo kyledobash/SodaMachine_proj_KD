@@ -94,13 +94,33 @@ namespace SodaMachine
         //This is the main method for calculating the result of the transaction.
         //It takes in the payment from the customer, the soda object they selected, and the customer who is purchasing the soda.
         //This is the method that will determine the following:
-        //If the payment is greater than the price of the soda, and if the sodamachine has enough change to return: Dispense soda, and change to the customer.
-        //If the payment is greater than the cost of the soda, but the machine does not have ample change: Dispense payment back to the customer.
-        //If the payment is exact to the cost of the soda:  Dispense soda.
+        //If the payment is greater than the price of the soda, and if the sodamachine has enough change to return: Dispense soda, and change to the customer. x
+        //If the payment is greater than the cost of the soda, but the machine does not have ample change: Dispense payment back to the customer. x
+        //If the payment is exact to the cost of the soda:  Dispense soda. x
         //If the payment does not meet the cost of the soda: dispense payment back to the customer.
         private void CalculateTransaction(List<Coin> payment, Can chosenSoda, Customer customer)
         {
-           
+            double totalPaySum = TotalCoinValue(payment);
+            double totalRegisterSum = TotalCoinValue(_register);
+            double changeNeeded = DetermineChange(totalPaySum, chosenSoda.Price);
+
+           if (totalPaySum > chosenSoda.Price && totalRegisterSum > changeNeeded)
+            {
+                GetSodaFromInventory(chosenSoda.Name);
+                customer.AddCoinsIntoWallet(GatherChange(changeNeeded));
+            }
+           else if (totalPaySum > chosenSoda.Price && totalRegisterSum < changeNeeded)
+            {
+                customer.AddCoinsIntoWallet(payment);
+            }
+           else if (totalPaySum == chosenSoda.Price)
+            {
+                GetSodaFromInventory(chosenSoda.Name);
+            }
+           else if (totalPaySum < chosenSoda.Price)
+            {
+                customer.AddCoinsIntoWallet(payment);
+            }
         }
         //Takes in the value of the amount of change needed.
         //Attempts to gather all the required coins from the sodamachine's register to make change.
