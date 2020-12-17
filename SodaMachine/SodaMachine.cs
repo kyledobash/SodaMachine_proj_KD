@@ -110,7 +110,7 @@ namespace SodaMachine
            if (totalPaySum > chosenSoda.Price && totalRegisterSum > changeNeeded)
             {
                 DepositCoinsIntoRegister(payment);
-                GetSodaFromInventory(chosenSoda.Name);
+                customer.AddCanToBackpack(GetSodaFromInventory(chosenSoda.Name));
                 customer.AddCoinsIntoWallet(GatherChange(changeNeeded));
                 UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
@@ -121,7 +121,7 @@ namespace SodaMachine
            else if (totalPaySum == chosenSoda.Price)
             {
                 DepositCoinsIntoRegister(payment);
-                GetSodaFromInventory(chosenSoda.Name);
+                customer.AddCanToBackpack(GetSodaFromInventory(chosenSoda.Name));
                 UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
            else if (totalPaySum < chosenSoda.Price)
