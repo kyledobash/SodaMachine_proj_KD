@@ -105,7 +105,7 @@ namespace SodaMachine
         {
             double totalPaySum = TotalCoinValue(payment);
             double totalRegisterSum = TotalCoinValue(_register);
-            double changeNeeded = DetermineChange(totalPaySum, chosenSoda.Price);
+            double changeNeeded = Math.Round(DetermineChange(totalPaySum, chosenSoda.Price), 2);
 
            if (totalPaySum > chosenSoda.Price && totalRegisterSum > changeNeeded)
             {
@@ -138,6 +138,7 @@ namespace SodaMachine
             List<Coin> ChangeToDispense = new List<Coin>();
             double changeToDispenseSum = TotalCoinValue(ChangeToDispense);
             double changeNeeded = changeValue - changeToDispenseSum;
+            //changeNeeded = CalculateTransaction.changeNeeded
 
             while (changeToDispenseSum != changeValue)
             {
