@@ -76,7 +76,10 @@ namespace SodaMachine
         //pass payment to the calculate transaction method to finish up the transaction based on the results.
         private void Transaction(Customer customer)
         {
-           
+            string selectedCan = UserInterface.SodaSelection(_inventory);
+            Can selectedCanFromInventory = GetSodaFromInventory(selectedCan);
+            List<Coin> payment = customer.GatherCoinsFromWallet(selectedCanFromInventory);
+            CalculateTransaction(payment, selectedCanFromInventory, customer);
         }
         //Gets a soda from the inventory based on the name of the soda.
         private Can GetSodaFromInventory(string nameOfSoda)
@@ -97,7 +100,7 @@ namespace SodaMachine
         //If the payment is greater than the price of the soda, and if the sodamachine has enough change to return: Dispense soda, and change to the customer. x
         //If the payment is greater than the cost of the soda, but the machine does not have ample change: Dispense payment back to the customer. x
         //If the payment is exact to the cost of the soda:  Dispense soda. x
-        //If the payment does not meet the cost of the soda: dispense payment back to the customer.
+        //If the payment does not meet the cost of the soda: dispense payment back to the customer. x
         private void CalculateTransaction(List<Coin> payment, Can chosenSoda, Customer customer)
         {
             double totalPaySum = TotalCoinValue(payment);
@@ -106,8 +109,10 @@ namespace SodaMachine
 
            if (totalPaySum > chosenSoda.Price && totalRegisterSum > changeNeeded)
             {
+                DepositCoinsIntoRegister(payment);
                 GetSodaFromInventory(chosenSoda.Name);
                 customer.AddCoinsIntoWallet(GatherChange(changeNeeded));
+                UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
            else if (totalPaySum > chosenSoda.Price && totalRegisterSum < changeNeeded)
             {
@@ -115,7 +120,9 @@ namespace SodaMachine
             }
            else if (totalPaySum == chosenSoda.Price)
             {
+                DepositCoinsIntoRegister(payment);
                 GetSodaFromInventory(chosenSoda.Name);
+                UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
            else if (totalPaySum < chosenSoda.Price)
             {

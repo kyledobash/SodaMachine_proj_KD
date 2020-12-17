@@ -26,7 +26,16 @@ namespace SodaMachine
         //When all is said and done this method will return a list of coin objects that the customer will use a payment for their soda.
         public List<Coin> GatherCoinsFromWallet(Can selectedCan)
         {
-           
+            List<Coin> ChangeInHand = new List<Coin>();
+            double ChangeInHandValue = TotalCoinValue(ChangeInHand);
+
+            while (ChangeInHandValue < selectedCan.Price)
+            {
+                string coinSelection = UserInterface.CoinSelection(selectedCan, ChangeInHand);
+                ChangeInHand.Add(GetCoinFromWallet(coinSelection));
+                ChangeInHandValue = TotalCoinValue(ChangeInHand);
+            }
+            return ChangeInHand;
         }
         //Returns a coin object from the wallet based on the name passed into it.
         //Returns null if no coin can be found
@@ -53,6 +62,16 @@ namespace SodaMachine
         public void AddCanToBackpack(Can purchasedCan)
         {
             Backpack.cans.Add(purchasedCan);
+        }
+
+        private double TotalCoinValue(List<Coin> payment)
+        {
+            double sumOfPayment = 0;
+            for (int i = 0; i < payment.Count; i++)
+            {
+                sumOfPayment += payment[i].Value;
+            }
+            return sumOfPayment;
         }
     }
 }
