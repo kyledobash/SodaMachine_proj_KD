@@ -33,7 +33,12 @@ namespace SodaMachine
             {
                 string coinSelection = UserInterface.CoinSelection(selectedCan, ChangeInHand);
                 ChangeInHand.Add(GetCoinFromWallet(coinSelection));
-                ChangeInHandValue = TotalCoinValue(ChangeInHand);
+                ChangeInHandValue = TotalCoinValue(ChangeInHand); 
+                
+                if (coinSelection == "Done")
+                {
+                    break;
+                }              
             }
             return ChangeInHand;
         }
